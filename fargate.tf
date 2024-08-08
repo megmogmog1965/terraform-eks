@@ -6,7 +6,7 @@ resource "aws_eks_fargate_profile" "fargate_profile" {
   subnet_ids = aws_subnet.eks_private_subnet[*].id
 
   selector {
-    namespace = "default"
+    namespace = "*"
   }
 
   tags = {

@@ -32,3 +32,9 @@ resource "aws_iam_role_policy_attachment" "eks_cluster_policy_attachment" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
   role       = aws_iam_role.eks_cluster_role.name
 }
+
+resource "aws_iam_openid_connect_provider" "oidc_provider" {
+  url             = aws_eks_cluster.eks.identity[0].oidc[0].issuer
+  client_id_list  = ["sts.amazonaws.com"]
+  thumbprint_list = ["d66f16038e1855a994171c9163127a122e0671c9"]
+}

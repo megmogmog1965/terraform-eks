@@ -16,28 +16,49 @@ resource "aws_internet_gateway" "eks_igw" {
   }
 }
 
+# Elastic IP for NAT Gateway
+resource "aws_eip" "eks_nat" {
+  vpc = true
+
+  tags = {
+    Name = "eks-nat-eip"
+  }
+}
+
+# NAT Gateway
+resource "aws_nat_gateway" "eks_nat_gateway" {
+  allocation_id = aws_eip.eks_nat.id
+  subnet_id     = aws_subnet.eks_public_subnet[0].id # パブリックサブネットを指定
+
+  tags = {
+    Name = "eks-nat-gateway"
+  }
+}
+
 # パブリックサブネットの設定
 resource "aws_subnet" "eks_public_subnet" {
-  count                   = 2  # 2つのパブリックサブネットを作成
+  count                   = 2 # 2つのパブリックサブネットを作成
   vpc_id                  = aws_vpc.eks_vpc.id
   cidr_block              = cidrsubnet(aws_vpc.eks_vpc.cidr_block, 8, count.index)
   availability_zone       = element(data.aws_availability_zones.available.names, count.index)
   map_public_ip_on_launch = true
 
   tags = {
-    Name = "eks-public-subnet-${count.index}"
+    Name                     = "eks-public-subnet-${count.index}"
+    "kubernetes.io/role/elb" = "1"
   }
 }
 
 # プライベートサブネットの設定
 resource "aws_subnet" "eks_private_subnet" {
-  count                   = 2  # 2つのプライベートサブネットを作成
-  vpc_id                  = aws_vpc.eks_vpc.id
-  cidr_block              = cidrsubnet(aws_vpc.eks_vpc.cidr_block, 8, count.index + 2)  # 異なるCIDRを設定
-  availability_zone       = element(data.aws_availability_zones.available.names, count.index)
+  count             = 2 # 2つのプライベートサブネットを作成
+  vpc_id            = aws_vpc.eks_vpc.id
+  cidr_block        = cidrsubnet(aws_vpc.eks_vpc.cidr_block, 8, count.index + 2) # 異なるCIDRを設定
+  availability_zone = element(data.aws_availability_zones.available.names, count.index)
 
   tags = {
-    Name = "eks-private-subnet-${count.index}"
+    Name                     = "eks-private-subnet-${count.index}"
+    "kubernetes.io/role/elb" = "1"
   }
 }
 
@@ -58,6 +79,11 @@ resource "aws_route_table" "eks_public_route_table" {
 # プライベートルートテーブルの設定
 resource "aws_route_table" "eks_private_route_table" {
   vpc_id = aws_vpc.eks_vpc.id
+
+  route {
+    cidr_block     = "0.0.0.0/0"
+    nat_gateway_id = aws_nat_gateway.eks_nat_gateway.id
+  }
 
   tags = {
     Name = "eks-private-route-table"
