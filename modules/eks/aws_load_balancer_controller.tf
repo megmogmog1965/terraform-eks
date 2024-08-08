@@ -177,4 +177,8 @@ resource "helm_release" "aws_lb_controller" {
     name  = "vpcId"
     value = aws_vpc.eks_vpc.id
   }
+
+  depends_on = [
+    aws_eks_fargate_profile.fargate_profile
+  ]
 }
