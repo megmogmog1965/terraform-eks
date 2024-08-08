@@ -18,7 +18,7 @@ resource "aws_internet_gateway" "eks_igw" {
 
 # Elastic IP for NAT Gateway
 resource "aws_eip" "eks_nat" {
-  vpc = true
+  domain = "vpc"
 
   tags = {
     Name = "eks-nat-eip"
