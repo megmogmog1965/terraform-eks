@@ -5,5 +5,5 @@ Amazon EKS と Kubernetes 上のリソースを全て Terraform だけで管理�
 
 | Modules | Description |
 |:--- |:--- |
-| eks | Amazon Cluster を構築する. |
-| k8s | Kubernetes のリソース (Deployment, Service, Ingres...) を構築する. |
+| eks | Amazon EKS Cluster を構築する. |
+| k8s | Kubernetes のリソース (Deployment, Service, Ingress...) を構築する. |
