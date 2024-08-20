@@ -14,7 +14,7 @@ resource "aws_eks_fargate_profile" "fargate_profile" {
   }
 
   depends_on = [
-    kubernetes_config_map_v1_data.aws-auth
+    kubernetes_config_map_v1.aws-auth
   ]
 }
 
