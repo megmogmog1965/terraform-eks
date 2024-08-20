@@ -9,7 +9,7 @@ resource "kubernetes_config_map" "aws_logging" {
   }
 
   data = {
-    flb_log_cw = "false"
+    flb_log_cw     = "false"
     "filters.conf" = <<EOL
 [FILTER]
     Name parser
@@ -24,7 +24,7 @@ resource "kubernetes_config_map" "aws_logging" {
     Buffer_Size 0
     Kube_Meta_Cache_TTL 300s
 EOL
-    "output.conf" = <<EOL
+    "output.conf"  = <<EOL
 [OUTPUT]
     Name cloudwatch_logs
     Match   kube.*

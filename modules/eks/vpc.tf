@@ -44,7 +44,8 @@ resource "aws_subnet" "eks_public_subnet" {
   map_public_ip_on_launch = true
 
   tags = {
-    Name                     = "eks-public-subnet-${count.index}"
+    Name = "eks-public-subnet-${count.index}"
+    # https://docs.aws.amazon.com/ja_jp/eks/latest/userguide/network-load-balancing.html
     "kubernetes.io/role/elb" = "1"
   }
 }
@@ -57,8 +58,9 @@ resource "aws_subnet" "eks_private_subnet" {
   availability_zone = element(data.aws_availability_zones.available.names, count.index)
 
   tags = {
-    Name                     = "eks-private-subnet-${count.index}"
-    "kubernetes.io/role/elb" = "1"
+    Name = "eks-private-subnet-${count.index}"
+    # https://docs.aws.amazon.com/ja_jp/eks/latest/userguide/network-load-balancing.html
+    "kubernetes.io/role/internal-elb" = "1"
   }
 }
 
