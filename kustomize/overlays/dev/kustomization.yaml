@@ -1,0 +1,10 @@
+resources:
+  - ../../base
+  - namespace.yaml
+  - nginx-configmap.yaml
+
+patches:
+  - path: deployment-patch.yaml
+
+namespace: dev
+
