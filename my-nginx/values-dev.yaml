@@ -1,0 +1,4 @@
+replicaCount: 1
+text: "hello this is dev"
+certificateArn: "TO BE UPDATED"
+

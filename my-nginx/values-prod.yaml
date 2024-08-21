@@ -1,0 +1,4 @@
+replicaCount: 1
+text: "hello this is prod"
+certificateArn: "TO BE UPDATED"
+

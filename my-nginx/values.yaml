@@ -1,0 +1,4 @@
+replicaCount: 1
+text: "hello this is a default environment"
+certificateArn: "arn:aws:acm:default-certificate-arn"
+
